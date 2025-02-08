@@ -46,7 +46,7 @@ library ieee;
 entity top_basys3 is
 	port(
 		-- Switches
-		sw		:	in  std_logic_vector(15 downto 0);
+		sw		:	in  std_logic_vector(8 downto 0);
 		
 		-- LEDs
 		led	    :	out	std_logic_vector(15 downto 0)
@@ -56,12 +56,54 @@ end top_basys3;
 architecture top_basys3_arch of top_basys3 is 
 	
     -- declare the component of your top-level design
-
+    component ripple_adder is
+        Port ( A : in STD_LOGIC_VECTOR (3 downto 0);
+               B : in STD_LOGIC_VECTOR (3 downto 0);
+               Cin : in STD_LOGIC;
+               S : out STD_LOGIC_VECTOR (3 downto 0);
+               Cout : out STD_LOGIC);
+     end component ripple_adder;     
     -- declare any signals you will need	
-  
+        signal w_carry  : STD_LOGIC_VECTOR(3 downto 0); -- for ripple between adders
+        signal A, B, S : STD_LOGIC_VECTOR (3 downto 0);--input signals
+        signal Cin, Cout: STD_LOGIC;--carry signals
 begin
 	-- PORT MAPS --------------------
-   
+   ripple_adder_0: ripple_adder
+    port map(
+        A     => A(0),
+        B     => B(0),
+        Cin   => Cin,   -- Directly to input here
+        S     => S(0),
+        Cout  => w_carry(0)
+    );
+
+    full_adder_1: full_adder
+    port map(
+        i_A     => A(1),
+        i_B     => B(1),
+        i_Cin   => w_carry(0),   -- Directly to input here
+        o_S     => S(1),
+        o_Cout  => w_carry(1)
+    );
+    
+    full_adder_2: full_adder
+    port map(
+        i_A     => A(2),
+        i_B     => B(2),
+        i_Cin   => w_carry(1),   -- Directly to input here
+        o_S     => S(2),
+        o_Cout  => w_carry(2)
+    );
+    
+    full_adder_3: full_adder
+    port map(
+        i_A     => A(3),
+        i_B     => B(3),
+        i_Cin   => w_carry(2),   -- Directly to input here
+        o_S     => S(2),
+        o_Cout  => w_carry(3)
+    );
 	---------------------------------
 	
 	-- CONCURRENT STATEMENTS --------
