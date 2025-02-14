@@ -22,3 +22,9 @@ Then it **elaborates** the entity defined by `$TB_ENTITY`
 Finally, the workflow **runs** the simulation. If successful then it will quietly exit with a `0` code.
 If any of the `assert` statements fail then GHDL will cease the simulation and exit with non-zero code; this will also cause the workflow to fail.
 Assert statements of other severity levels will be reported, but not fail the workflow.
+
+![My sketch of my top level Basys3](top_basys3_sketch.png)
+![My waveform](ripple_adder_waveform.png)
+
+##Documentation
+C3C Duke Harris helped me with understanding how to create my testbench correctly after not understanding how the code read the LSB/MSB, he also helped me troubleshoot my bitstream not generating after realizng the lab instructions were incorrect/incomplete and some of the provided code was also incorrect.

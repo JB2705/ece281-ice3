@@ -46,7 +46,7 @@ library ieee;
 entity top_basys3 is
 	port(
 		-- Switches
-		sw		:	in  std_logic_vector(8 downto 0);
+		sw		:	in  std_logic_vector(15 downto 0);
 		
 		-- LEDs
 		led	    :	out	std_logic_vector(15 downto 0)
@@ -65,48 +65,31 @@ architecture top_basys3_arch of top_basys3 is
      end component ripple_adder;     
     -- declare any signals you will need	
         signal w_carry  : STD_LOGIC_VECTOR(3 downto 0); -- for ripple between adders
-        signal A, B, S : STD_LOGIC_VECTOR (3 downto 0);--input signals
-        signal Cin, Cout: STD_LOGIC;--carry signals
 begin
 	-- PORT MAPS --------------------
-   ripple_adder_0: ripple_adder
+    ripple_adder_1: ripple_adder
     port map(
-        A     => A(0),
-        B     => B(0),
-        Cin   => Cin,   -- Directly to input here
-        S     => S(0),
-        Cout  => w_carry(0)
-    );
-
-    full_adder_1: full_adder
-    port map(
-        i_A     => A(1),
-        i_B     => B(1),
-        i_Cin   => w_carry(0),   -- Directly to input here
-        o_S     => S(1),
-        o_Cout  => w_carry(1)
-    );
+    A(0) => sw(1),
+    A(1) => sw(2),
+    A(2) => sw(3),
+    A(3) => sw(4),
     
-    full_adder_2: full_adder
-    port map(
-        i_A     => A(2),
-        i_B     => B(2),
-        i_Cin   => w_carry(1),   -- Directly to input here
-        o_S     => S(2),
-        o_Cout  => w_carry(2)
-    );
+    B(0) => sw(12),--might have to change 12-14
+    B(1) => sw(13),
+    B(2) => sw(14),
+    B(3) => sw(15),
     
-    full_adder_3: full_adder
-    port map(
-        i_A     => A(3),
-        i_B     => B(3),
-        i_Cin   => w_carry(2),   -- Directly to input here
-        o_S     => S(2),
-        o_Cout  => w_carry(3)
+    Cin  => sw(0),
+    
+    S(0) => led(0),
+    S(1) => led(1),
+    S(2) => led(2),
+    S(3) => led(3),
+    
+    Cout => led(15)
     );
-	---------------------------------
 	
 	-- CONCURRENT STATEMENTS --------
-	led(14 downto 4) <= (others => '0'); -- Ground unused LEDs
+	led(14 downto 4) <= (others => '0'); -- Ground unused LEDs --may have to ground unused switches
 	---------------------------------
 end top_basys3_arch;
